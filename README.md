@@ -1,3 +1,11 @@
+---
+title: Hoja Traffic Signal Control
+emoji: 🚦
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 8000
+---
 # Hoja - Traffic Signal Control Environment
 
 An OpenEnv reinforcement learning environment that simulates a **4-way traffic intersection**. An LLM agent controls traffic signals to minimise wait times, handle pedestrian crossings, and prioritise emergency vehicles.
