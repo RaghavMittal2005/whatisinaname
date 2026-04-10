@@ -1,5 +1,5 @@
 """
-Inference Script — Hoja Traffic Signal Control
+Inference Script - Hoja Traffic Signal Control
 ===============================================
 MANDATORY
 - Before submitting, ensure the following variables are defined in your environment configuration:
@@ -74,7 +74,7 @@ You are an AI traffic signal controller for a 4-way intersection.
 Each turn you receive the current traffic state and must decide which direction
 to give a green signal and for how long.
 
-ACTIONS — reply with EXACTLY this JSON format (nothing else):
+ACTIONS - reply with EXACTLY this JSON format (nothing else):
 {"direction": "<north|south|east|west>", "duration_seconds": <5-60>}
 
 STRATEGY TIPS:
@@ -82,7 +82,7 @@ STRATEGY TIPS:
 - If an emergency vehicle is present, IMMEDIATELY give green to its direction
 - Use shorter durations (10-20s) when traffic is balanced
 - Use longer durations (30-60s) when one direction is heavily congested
-- Consider pedestrian count — they cross during signal changes
+- Consider pedestrian count - they cross during signal changes
 
 Your goal: minimise average wait time, clear emergency vehicles fast, avoid long queues.
 """).strip()
@@ -113,12 +113,12 @@ def build_user_prompt(obs, last_reward: float, history: List[str]) -> str:
         f"Status: {obs.status_message}",
         f"Current green: {obs.current_green}",
         f"Time of day: {obs.time_of_day}",
-        f"Queues — N:{obs.queue_north}  S:{obs.queue_south}  E:{obs.queue_east}  W:{obs.queue_west}",
+        f"Queues - N:{obs.queue_north}  S:{obs.queue_south}  E:{obs.queue_east}  W:{obs.queue_west}",
         f"Average wait time: {obs.average_wait_time:.2f}",
         f"Pedestrians waiting: {obs.pedestrian_count}",
     ]
     if obs.emergency_vehicle_present:
-        parts.append(f"🚑 EMERGENCY VEHICLE in {obs.emergency_vehicle_direction} direction — prioritise!")
+        parts.append(f"🚑 EMERGENCY VEHICLE in {obs.emergency_vehicle_direction} direction - prioritise!")
     parts.append(f"Last reward: {last_reward:.2f}")
     parts.append(f"Recent history:\n{history_block}")
     parts.append('Reply with JSON: {"direction": "...", "duration_seconds": ...}')

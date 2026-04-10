@@ -116,7 +116,7 @@ class HojaEnvironment(Environment):
             self._emergency_direction = random.choice(DIRECTIONS)
 
         return self._build_observation(
-            status_message=f"Traffic intersection ready — task={self._task}",
+            status_message=f"Traffic intersection ready - task={self._task}",
             reward=0.0,
             done=False,
         )
@@ -184,7 +184,7 @@ class HojaEnvironment(Environment):
 
             if self._emergency_present:
                 if direction == self._emergency_direction:
-                    # Agent gave green to the emergency direction — cleared!
+                    # Agent gave green to the emergency direction - cleared!
                     emergency_bonus = 5.0
                     self._emergency_present = False
                     self._emergency_direction = None

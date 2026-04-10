@@ -29,7 +29,7 @@ class HojaState(State):
 
 
 class HojaAction(Action):
-    """Action for the Hoja traffic environment — change the traffic signal."""
+    """Action for the Hoja traffic environment - change the traffic signal."""
 
     direction: str = Field(
         ...,

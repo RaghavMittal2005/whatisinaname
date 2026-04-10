@@ -1,4 +1,4 @@
-# Hoja — Traffic Signal Control Environment
+# Hoja - Traffic Signal Control Environment
 
 An OpenEnv reinforcement learning environment that simulates a **4-way traffic intersection**. An LLM agent controls traffic signals to minimise wait times, handle pedestrian crossings, and prioritise emergency vehicles.
 
@@ -61,6 +61,6 @@ openenv push --repo-id your-username/your-space
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `HOJA_TASK` | Task difficulty: `easy`, `medium`, `hard` | `easy` |
-| `HF_TOKEN` | Hugging Face API token | — |
+| `HF_TOKEN` | Hugging Face API token | - |
 | `API_BASE_URL` | LLM API endpoint | `https://router.huggingface.co/v1` |
 | `MODEL_NAME` | Model to use for inference | `Qwen/Qwen2.5-72B-Instruct` |
