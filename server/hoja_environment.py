@@ -194,17 +194,29 @@ class HojaEnvironment(Environment):
                     if self._emergency_wait > 2:
                         emergency_penalty = -3.0
 
-        # --- 6. Compute reward -------------------------------------
+        # --- 6. Compute reward (Normalized to [0.0, 1.0]) -------------
+        # Base Reward (60%): Quality of traffic flow
         avg_wait = sum(self._wait_times.values()) / len(DIRECTIONS)
-        base_reward = -avg_wait / 10.0
+        wait_score = max(0.0, 1.0 - (avg_wait / 40.0))
+        
+        # Emergency Vehicle logic (30%):
+        # 0.3 if no emergency vehicle is waiting.
+        # 0.1 if an emergency vehicle is waiting (less than 2 steps).
+        # 0.0 if an emergency vehicle has been waiting too long.
+        emergency_score = 0.3
+        if self._cfg["emergencies"] and self._emergency_present:
+            if self._emergency_wait > 2:
+                emergency_score = 0.0
+            else:
+                emergency_score = 0.1
+        
+        # Pedestrian/Queue Safety (10%):
+        max_queue = max(self._queues.values())
+        safety_penalty = min(0.1, (max_queue / 20.0) * 0.05 + (self._pedestrian_count / 20.0) * 0.05)
+        safety_score = 0.1 - safety_penalty
 
-        # Queue overflow penalty
-        queue_penalty = sum(-0.5 for d in DIRECTIONS if self._queues[d] > 15)
-
-        # Pedestrian wait penalty (medium/hard)
-        ped_penalty = -0.3 * self._pedestrian_count if self._pedestrian_count > 8 else 0.0
-
-        reward = base_reward + emergency_bonus + emergency_penalty + queue_penalty + ped_penalty
+        reward = (wait_score * 0.6) + emergency_score + safety_score
+        reward = max(0.0, min(1.0, reward))
 
         done = self._state.step_count >= self._max_steps
 

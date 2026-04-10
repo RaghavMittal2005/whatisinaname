@@ -63,11 +63,6 @@ MAX_STEPS = 25
 TEMPERATURE = 0.7
 MAX_TOKENS = 200
 
-# Reward range: best case ~0 (no wait), worst case can be very negative.
-# We normalise with a soft ceiling so score fits [0, 1].
-BEST_POSSIBLE_REWARD = 0.0          # perfect run: no wait at all
-WORST_EXPECTED_REWARD = -50.0       # very bad run
-
 SYSTEM_PROMPT = textwrap.dedent("""\
 You are an AI traffic signal controller for a 4-way intersection.
 
@@ -218,10 +213,9 @@ async def run_task(task_name: str) -> None:
                 break
 
         # Normalise total reward to [0, 1]
-        total = sum(rewards)
-        score = (total - WORST_EXPECTED_REWARD) / (BEST_POSSIBLE_REWARD - WORST_EXPECTED_REWARD)
+        score = sum(rewards) / len(rewards) if rewards else 0.0
         score = min(max(score, 0.0), 1.0)
-        success = score >= 0.3
+        success = score >= 0.5
 
     finally:
         try:
