@@ -210,9 +210,9 @@ class HojaEnvironment(Environment):
 
         status_parts = [f"Green={direction} for {duration}s, cleared {cleared} cars"]
         if emergency_bonus > 0:
-            status_parts.append("🚑 Emergency vehicle cleared!")
+            status_parts.append("[EMERGENCY] Vehicle cleared!")
         if emergency_penalty < 0:
-            status_parts.append("⚠️ Emergency vehicle still waiting!")
+            status_parts.append("[WARNING] Emergency vehicle still waiting!")
         status_msg = " | ".join(status_parts)
 
         return self._build_observation(

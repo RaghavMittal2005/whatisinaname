@@ -6,9 +6,9 @@ An OpenEnv reinforcement learning environment that simulates a **4-way traffic i
 
 | Task | Difficulty | Traffic | Pedestrians | Emergencies |
 |------|-----------|---------|-------------|-------------|
-| `easy` | Low | Off-peak (0–3 cars/step) | ❌ | ❌ |
-| `medium` | Normal | Normal (1–5 cars/step) | ✅ | ❌ |
-| `hard` | Peak hour | Heavy (3–8 cars/step) | ✅ | ✅ 🚑 |
+| `easy` | Low | Off-peak (0-3 cars/step) | No | No |
+| `medium` | Normal | Normal (1-5 cars/step) | Yes | No |
+| `hard` | Peak hour | Heavy (3-8 cars/step) | Yes | Yes |
 
 ## Action
 
@@ -35,7 +35,7 @@ The agent chooses which direction gets a green signal and for how long.
 - **Emergency bonus**: `+5.0` for clearing an emergency vehicle
 - **Emergency penalty**: `-3.0` if emergency waits > 2 steps
 - **Queue penalty**: `-0.5` per direction with queue > 15
-- **Pedestrian penalty**: `-0.3 × count` if pedestrians > 8
+- **Pedestrian penalty**: `-0.3 * count` if pedestrians > 8
 
 ## Quick Start
 

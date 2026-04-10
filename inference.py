@@ -118,7 +118,7 @@ def build_user_prompt(obs, last_reward: float, history: List[str]) -> str:
         f"Pedestrians waiting: {obs.pedestrian_count}",
     ]
     if obs.emergency_vehicle_present:
-        parts.append(f"🚑 EMERGENCY VEHICLE in {obs.emergency_vehicle_direction} direction - prioritise!")
+        parts.append(f"EMERGENCY VEHICLE in {obs.emergency_vehicle_direction} direction - prioritise!")
     parts.append(f"Last reward: {last_reward:.2f}")
     parts.append(f"Recent history:\n{history_block}")
     parts.append('Reply with JSON: {"direction": "...", "duration_seconds": ...}')
