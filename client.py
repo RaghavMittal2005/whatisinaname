@@ -4,7 +4,7 @@
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 
-"""Hoja Environment Client."""
+"""Hoja Traffic Signal Control Environment Client."""
 
 from typing import Dict
 
@@ -19,59 +19,39 @@ class HojaEnv(
     EnvClient[HojaAction, HojaObservation, State]
 ):
     """
-    Client for the Hoja Environment.
-
-    This client maintains a persistent WebSocket connection to the environment server,
-    enabling efficient multi-step interactions with lower latency.
-    Each client instance has its own dedicated environment session on the server.
-
-    Example:
-        >>> # Connect to a running server
-        >>> with HojaEnv(base_url="http://localhost:8000") as client:
-        ...     result = client.reset()
-        ...     print(result.observation.echoed_message)
-        ...
-        ...     result = client.step(HojaAction(message="Hello!"))
-        ...     print(result.observation.echoed_message)
+    Client for the Hoja Traffic Signal Control Environment.
 
     Example with Docker:
-        >>> # Automatically start container and connect
-        >>> client = HojaEnv.from_docker_image("hoja-env:latest")
+        >>> client = HojaEnv.from_docker_image("hoja-app:latest")
         >>> try:
         ...     result = client.reset()
-        ...     result = client.step(HojaAction(message="Test"))
+        ...     result = client.step(HojaAction(direction="north", duration_seconds=30))
         ... finally:
         ...     client.close()
     """
 
     def _step_payload(self, action: HojaAction) -> Dict:
-        """
-        Convert HojaAction to JSON payload for step message.
-
-        Args:
-            action: HojaAction instance
-
-        Returns:
-            Dictionary representation suitable for JSON encoding
-        """
         return {
-            "message": action.message,
+            "direction": action.direction,
+            "duration_seconds": action.duration_seconds,
         }
 
     def _parse_result(self, payload: Dict) -> StepResult[HojaObservation]:
-        """
-        Parse server response into StepResult[HojaObservation].
-
-        Args:
-            payload: JSON response data from server
-
-        Returns:
-            StepResult with HojaObservation
-        """
         obs_data = payload.get("observation", {})
         observation = HojaObservation(
-            echoed_message=obs_data.get("echoed_message", ""),
-            message_length=obs_data.get("message_length", 0),
+            status_message=obs_data.get("status_message", ""),
+            current_green=obs_data.get("current_green", "none"),
+            time_of_day=obs_data.get("time_of_day", "off_peak"),
+            queue_north=obs_data.get("queue_north", 0),
+            queue_south=obs_data.get("queue_south", 0),
+            queue_east=obs_data.get("queue_east", 0),
+            queue_west=obs_data.get("queue_west", 0),
+            pedestrian_count=obs_data.get("pedestrian_count", 0),
+            emergency_vehicle_present=obs_data.get("emergency_vehicle_present", False),
+            emergency_vehicle_direction=obs_data.get("emergency_vehicle_direction"),
+            average_wait_time=obs_data.get("average_wait_time", 0.0),
+            step_number=obs_data.get("step_number", 0),
+            max_steps=obs_data.get("max_steps", 25),
             done=payload.get("done", False),
             reward=payload.get("reward"),
             metadata=obs_data.get("metadata", {}),
@@ -84,15 +64,6 @@ class HojaEnv(
         )
 
     def _parse_state(self, payload: Dict) -> State:
-        """
-        Parse server response into State object.
-
-        Args:
-            payload: JSON response from state request
-
-        Returns:
-            State object with episode_id and step_count
-        """
         return State(
             episode_id=payload.get("episode_id"),
             step_count=payload.get("step_count", 0),

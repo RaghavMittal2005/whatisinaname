@@ -5,14 +5,14 @@
 # LICENSE file in the root directory of this source tree.
 
 """
-FastAPI application for the Hoja Environment.
+FastAPI application for the Hoja Traffic Signal Control Environment.
 
 This module creates an HTTP server that exposes the HojaEnvironment
 over HTTP and WebSocket endpoints, compatible with EnvClient.
 
 Endpoints:
     - POST /reset: Reset the environment
-    - POST /step: Execute an action
+    - POST /step: Execute a traffic signal change action
     - GET /state: Get current environment state
     - GET /schema: Get action/observation schemas
     - WS /ws: WebSocket endpoint for persistent sessions
