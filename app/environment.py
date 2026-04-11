@@ -42,6 +42,7 @@ class HojaEnvironment(Environment):
     SUPPORTS_CONCURRENT_SESSIONS: bool = True
 
     def __init__(self):
+        print("Hoja Professional Environment v0.1.1 Starting...")
         self._task = os.getenv("HOJA_TASK", "medium")
         if self._task not in TASKS:
             self._task = "medium"

@@ -61,6 +61,7 @@ async def dashboard():
     """Simple dashboard endpoint returning metrics format suitable for frontend visualization."""
     return {
         "status": "online",
+        "version": "0.1.1",
         "description": "Hoja Traffic Control Dashboard API endpoint.",
         "metrics_visualization": "Add canvas traffic viz here"
     }

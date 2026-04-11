@@ -8,7 +8,7 @@ Supporting lazy-loading of submodules to prevent circular dependencies
 and ensure compatibility with beartype initialization hooks.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1" # Force fresh deployment
 
 def __getattr__(name: str):
     """Lazy-load modules on access to avoid circular imports."""
