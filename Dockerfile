@@ -7,6 +7,10 @@ RUN pip install uv
 
 # Create cached dependencies
 COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
+
+# Copy source and install project
+COPY . .
 RUN uv sync --frozen --no-dev
 
 # Final executing stage
