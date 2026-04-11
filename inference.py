@@ -166,9 +166,14 @@ async def run_task(task_name: str) -> None:
     """Run a single episode for the given task."""
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
 
-    env = await HojaEnv.from_docker_image(
-        IMAGE_NAME,
-        env_vars={"HOJA_TASK": task_name},
+    # Set the task environment variable for the server process
+    os.environ["HOJA_TASK"] = task_name
+    
+    # Use from_env with use_docker=False to avoid validator crashes
+    env = await HojaEnv.from_env(
+        "hoja",
+        use_docker=False,
+        project_path=".",
     )
 
     history: List[str] = []
