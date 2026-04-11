@@ -210,10 +210,18 @@ async def run_task(task_name: str) -> None:
             )
 
             if done:
+                # Replace primitive score calculation with the detailed Grader output
+                if obs.metadata and "grader_report" in obs.metadata:
+                    score = obs.metadata["grader_report"].get("total_score", 0.0)
+                    # Baseline example parsing
+                    baseline = obs.metadata["grader_report"].get("baseline_gpt4o_mini", 0.0)
+                    print(f"[DEBUG] Final Grader Score: {score:.2f} (Baseline: {baseline:.2f})", flush=True)
                 break
 
-        # Normalise total reward to [0, 1]
-        score = sum(rewards) / len(rewards) if rewards else 0.0
+        # Fallback if grader fails or completes early
+        if score == 0.0 and rewards:
+            score = sum(rewards) / len(rewards)
+        
         score = min(max(score, 0.0), 1.0)
         success = score >= 0.5
 
@@ -226,7 +234,7 @@ async def run_task(task_name: str) -> None:
 
 
 async def main() -> None:
-    tasks = os.getenv("HOJA_TASKS", "easy,medium,hard").split(",")
+    tasks = os.getenv("HOJA_TASKS", "easy,medium,hard,night,incident").split(",")
     for task in tasks:
         task = task.strip()
         if task:

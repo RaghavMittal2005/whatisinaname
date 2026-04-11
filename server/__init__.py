@@ -6,6 +6,9 @@
 
 """Hoja environment server components."""
 
-from .hoja_environment import HojaEnvironment
+try:
+    from hoja.app.environment import HojaEnvironment
+except ImportError:
+    from app.environment import HojaEnvironment
 
 __all__ = ["HojaEnvironment"]

@@ -4,7 +4,4 @@
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 
-"""Hoja Environment."""
-
-# Let models and client be imported explicitly to avoid circular dependencies during boot
-__version__ = "0.1.0"
+"""Hoja application logic and core definitions."""

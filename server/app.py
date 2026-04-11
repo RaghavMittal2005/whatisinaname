@@ -36,15 +36,15 @@ except Exception as e:  # pragma: no cover
     ) from e
 
 try:
-    from hoja.models import HojaAction, HojaObservation
-    from hoja.server.hoja_environment import HojaEnvironment
+    from hoja.app.models import HojaAction, HojaObservation
+    from hoja.app.environment import HojaEnvironment
 except ImportError:
     try:
-        from ..models import HojaAction, HojaObservation
-        from .hoja_environment import HojaEnvironment
+        from ..app.models import HojaAction, HojaObservation
+        from ..app.environment import HojaEnvironment
     except ImportError:
-        from models import HojaAction, HojaObservation
-        from server.hoja_environment import HojaEnvironment
+        from app.models import HojaAction, HojaObservation
+        from app.environment import HojaEnvironment
 
 
 # Create the app with web interface and README integration
@@ -56,6 +56,14 @@ app = create_app(
     max_concurrent_envs=1,  # increase this number to allow more concurrent WebSocket sessions
 )
 
+@app.get("/dashboard")
+async def dashboard():
+    """Simple dashboard endpoint returning metrics format suitable for frontend visualization."""
+    return {
+        "status": "online",
+        "description": "Hoja Traffic Control Dashboard API endpoint.",
+        "metrics_visualization": "Add canvas traffic viz here"
+    }
 
 def main(host: str = "0.0.0.0", port: int = 8000):
     """

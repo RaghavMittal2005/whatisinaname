@@ -12,11 +12,11 @@ from openenv.core import EnvClient
 from openenv.core.client_types import StepResult
 from openenv.core.env_server.types import State
 
-from .models import HojaAction, HojaObservation
+from .app.models import HojaAction, HojaObservation, HojaState
 
 
 class HojaEnv(
-    EnvClient[HojaAction, HojaObservation, State]
+    EnvClient[HojaAction, HojaObservation, HojaState]
 ):
     """
     Client for the Hoja Traffic Signal Control Environment.

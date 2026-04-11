@@ -8,15 +8,19 @@ app_port: 8000
 ---
 # Hoja - Traffic Signal Control Environment
 
+[![Pytest Coverage](https://img.shields.io/badge/coverage-80%25-green)](tests/)
+
 An OpenEnv reinforcement learning environment that simulates a **4-way traffic intersection**. An LLM agent controls traffic signals to minimise wait times, handle pedestrian crossings, and prioritise emergency vehicles.
 
 ## Tasks
 
-| Task | Difficulty | Traffic | Pedestrians | Emergencies |
-|------|-----------|---------|-------------|-------------|
-| `easy` | Low | Off-peak (0-3 cars/step) | No | No |
-| `medium` | Normal | Normal (1-5 cars/step) | Yes | No |
-| `hard` | Peak hour | Heavy (3-8 cars/step) | Yes | Yes |
+| Task | Difficulty | Traffic | Pedestrians | Emergencies | Description |
+|------|-----------|---------|-------------|-------------|-------------|
+| `easy` | Low | Off-peak (0-3 cars/step) | No | No | Basic flow control |
+| `medium` | Normal | Normal (1-5 cars/step) | Yes | No | Adds pedestrian gaps |
+| `hard` | Peak hour | Heavy (3-8 cars/step) | Yes | Yes | Peak hour + Ambulances |
+| `night` | Visibility | Low (0-4 cars/step) | High Risk | 0.3 | Low visibility condition |
+| `incident`| Chaos | Blocked (2-9 cars/step)| Yes | High | East bound blockage |
 
 ## Action
 
@@ -37,13 +41,13 @@ The agent chooses which direction gets a green signal and for how long.
 | `emergency_vehicle_direction` | Which direction the emergency vehicle is in |
 | `average_wait_time` | Average wait time across all directions |
 
-## Reward Design
+## Grader scoring metric formula
 
-- **Base**: `-average_wait_time / 10` (minimise wait)
-- **Emergency bonus**: `+5.0` for clearing an emergency vehicle
-- **Emergency penalty**: `-3.0` if emergency waits > 2 steps
-- **Queue penalty**: `-0.5` per direction with queue > 15
-- **Pedestrian penalty**: `-0.3 * count` if pedestrians > 8
+A custom Professional Grader (`app/grader.py`) outputs a cumulative scalar `[0.0, 1.0]` per episode:
+- **Throughput [0.35]:** Total vehicles passed intersection
+- **Safety [0.25]:** Penalty for pedestrians or queued vehicles violation
+- **Efficiency [0.20]:** Scaling factor of minimized wait times
+- **Emergency Priority [0.20]:** Number of emergency vehicles effectively passed
 
 ## Quick Start
 
